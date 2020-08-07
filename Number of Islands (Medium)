@@ -1,0 +1,102 @@
+Question Link:-https://leetcode.com/problems/number-of-islands/
+Given a 2d grid map of '1's (land) and '0's (water), count the number of islands. 
+An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically.
+You may assume all four edges of the grid are all surrounded by water.
+Example 1:
+
+Input: grid = [
+  ["1","1","1","1","0"],
+  ["1","1","0","1","0"],
+  ["1","1","0","0","0"],
+  ["0","0","0","0","0"]
+]
+Output: 1
+Example 2:
+
+Input: grid = [
+  ["1","1","0","0","0"],
+  ["1","1","0","0","0"],
+  ["0","0","1","0","0"],
+  ["0","0","0","1","1"]
+]
+Output: 3
+
+Hint:-The above question can be solved using DFS,BFS.The below solution represents how to solve this problem using BFS
+Solution:-
+class Solution {
+public:
+    int numIslands(vector<vector<char>>& grid) {
+           int rows=grid.size();
+        if(rows==0)
+            return 0;
+            int cols=grid[0].size();
+        vector<int>a(cols,0);
+        vector<vector<int>>visited;                                         //This is done to create an array of visited elements ,the process to store this can be optimised.
+        int i,j,k,l,m,o,p;
+        for(i=0;i<rows;i++)
+            visited.push_back(a);
+        queue<int>q;
+        k=0;                                                                //This is the variable storing the answer
+        for(i=0;i<rows;i++)
+        {
+            for(j=0;j<cols;j++)
+            {
+                if(grid[i][j]=='1' && visited[i][j]==0)
+                {
+                    k++;
+                                                                                       //The index value of island are entered who may or may not have adjacent islands ;
+                    q.push(i);
+                    q.push(j);
+                    visited[i][j]=1;
+                    while(q.size()!=0)
+                    {
+                        o=q.front();
+                        q.pop();
+                       p=q.front();
+                        q.pop();
+                
+                        if(o-1>=0)                                          //to check if moving left is valid
+                        {
+                            if(visited[o-1][p]==0 && grid[o-1][p]=='1')
+                            {
+                    q.push(o-1);
+                    q.push(p);
+                    visited[o-1][p]=1; 
+                            }
+                        }
+                        if(o+1<rows)                                      // to check if moving right is valid
+                        {
+                            //cout<<"entered";
+                            if(visited[o+1][p]==0 && grid[o+1][p]=='1')
+                            {
+                    q.push(o+1);
+                    q.push(p);
+                    visited[o+1][p]=1; 
+                            }
+                        }
+                         if(p+1<cols)                                  //to check if moving down is possible 
+                        {
+                            if(visited[o][p+1]==0 && grid[o][p+1]=='1')
+                            {
+                    q.push(o);
+                    q.push(p+1);
+                    visited[o][p+1]=1; 
+                            }
+                        }
+                         if(p-1>=0)                               //to check if moving up is valid
+                        {
+                            if(visited[o][p-1]==0 && grid[o][p-1]=='1') 
+                            {
+                    q.push(o);
+                    q.push(p-1);
+                    visited[o][p-1]=1; 
+                            }
+                        }
+                        
+                    }
+                }
+            }
+        }
+        return k;
+    }
+};
