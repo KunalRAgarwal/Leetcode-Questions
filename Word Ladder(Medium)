@@ -1,0 +1,81 @@
+Question Link:- https://leetcode.com/problems/word-ladder/
+Question:-
+Given two words (beginWord and endWord), and a dictionary's word list, find the length of shortest transformation sequence from beginWord to endWord, such that:
+
+Only one letter can be changed at a time.
+Each transformed word must exist in the word list.
+Note:
+
+Return 0 if there is no such transformation sequence.
+All words have the same length.
+All words contain only lowercase alphabetic characters.
+You may assume no duplicates in the word list.
+You may assume beginWord and endWord are non-empty and are not the same.
+Example 1:
+
+Input:
+beginWord = "hit",
+endWord = "cog",
+wordList = ["hot","dot","dog","lot","log","cog"]
+
+Output: 5
+
+Explanation: As one shortest transformation is "hit" -> "hot" -> "dot" -> "dog" -> "cog",
+return its length 5.
+Example 2:
+
+Input:
+beginWord = "hit"
+endWord = "cog"
+wordList = ["hot","dot","dog","lot","log"]
+
+Output: 0
+
+Explanation: The endWord "cog" is not in wordList, therefore no possible transformation.
+Hint:-The following question can be solved using BFS.The maain crux to solve this question is to move from hit to any other transformation one at a time we see that 
+hit can be converted in three ways
+*it
+h*t
+hi*
+where * is alphabets in the range [a,z].
+when an alphabet is replaced we check if that alphapet is present in the dictionary or not.
+Solution :-
+class Solution {
+public:
+    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
+        unordered_set<string> s(wordList.begin(), wordList.end());
+        queue<string> q;
+        q.push(beginWord);
+        if(s.count(endWord)==0)                                                         //If end word doesnot exist in dict we can directly return 0
+        return 0;
+        int ladder = 1;
+        while (!q.empty()) {
+            int n = q.size();
+            for (int i = 0; i < n; i++) {                                    //This is done to go level by level hence in the first level all the ones of the same level are removed
+                string word = q.front();
+                q.pop();
+                if (word == endWord) {
+                    return ladder;                                              //If word found 
+                }
+                s.erase(word);                                                    //This is done to avoid duplicate entries 
+                for (int j = 0; j < word.size(); j++) {
+                    char c = word[j];
+                    for (int k = 0; k < 26; k++) {                                //Characters being replaced
+                        word[j] = 'a' + k;
+                        if (s.find(word) != s.end()) {
+                            q.push(word);
+                        }
+                     }
+                    word[j] = c;
+                }
+            }
+            ladder++;                                                          //Incremet of level
+        }
+        return 0;
+    }
+};
+
+The following solution may show you TLE error in some cases as the time required to for replacing all characters can be really high ,but stil it passes all the test cases .
+The solution to the above problem is we try BFS in both directions.
+I will post that solution once I can actually understand how to id 
+Till that happy Coding:)
