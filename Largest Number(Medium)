@@ -1,0 +1,39 @@
+Question:-https://leetcode.com/problems/largest-number/
+Question:-
+Given a list of non negative integers, arrange them such that they form the largest number.
+
+Example 1:
+
+Input: [10,2]
+Output: "210"
+Example 2:
+
+Input: [3,30,34,5,9]
+Output: "9534330"
+
+Hint:-
+lets consider two numbers [9,20]
+now lets try concating the strings 
+"9"+"20"="920"
+convert them into int=920
+now the other possible way is 
+"20"+"9"="209"
+convert them into int=209
+now this compare function can be used to get the result.
+
+Solution:-
+class Solution {
+private:
+    static bool mycompare(const int& num1,const int& num2){
+        return to_string(num1) + to_string(num2) > to_string(num2) + to_string(num1);
+    }
+public:
+    string largestNumber(vector<int>& nums) {
+        sort(nums.begin(),nums.end(),mycompare);
+        string res = "";
+        for(int i = 0; i < (int)nums.size(); i++)
+            res += to_string(nums[i]);
+        return res[0] == '0' ? "0" : res;                   //We will check if all thee numbers are either 0.If we dont do that and if the array is [0,0,0] the output can be 000
+    }                                                       //To avoid that we check the following response
+    
+};
