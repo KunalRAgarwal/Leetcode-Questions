@@ -1,0 +1,143 @@
+Question Link:-https://leetcode.com/problems/friend-circles/
+Question:-
+There are N students in a class. Some of them are friends, while some are not. Their friendship is transitive in nature. 
+For example, if A is a direct friend of B, and B is a direct friend of C, then A is an indirect friend of C. And we defined a friend circle is a group of students who are direct or indirect friends.
+
+Given a N*N matrix M representing the friend relationship between students in the class. 
+If M[i][j] = 1, then the ith and jth students are direct friends with each other, otherwise not. 
+And you have to output the total number of friend circles among all the students.
+
+Example 1:
+
+Input: 
+[[1,1,0],
+ [1,1,0],
+ [0,0,1]]
+Output: 2
+Explanation:The 0th and 1st students are direct friends, so they are in a friend circle. 
+The 2nd student himself is in a friend circle. So return 2.
+ 
+
+Example 2:
+
+Input: 
+[[1,1,0],
+ [1,1,1],
+ [0,1,1]]
+Output: 1
+Explanation:The 0th and 1st students are direct friends, the 1st and 2nd students are direct friends, 
+so the 0th and 2nd students are indirect friends. All of them are in the same friend circle, so return 1.
+
+Hint :-To solve the question u need to know unoin set concept check the hint section after solution for detailed code which might help or check on geeks for geeks 
+Solution:-
+
+class Solution {
+public:
+    int parent[201];
+    
+    int findCircleNum(vector<vector<int>>& M) {
+        int i, j, groups = 0, n = M.size();
+        make_set(n);
+          
+        for(i = 0; i < n; i++) {
+            for(j = i + 1; j < n; j++) {
+                if(M[i][j])
+                    union_sets(i, j);
+            }
+        }
+        
+        for(i = 0; i < n; i++) {
+            if(i == parent[i])
+                groups++;
+        }
+        
+        return groups;
+    }
+
+private:
+    void make_set(int n) {
+        for(int i = 0; i < n; i++) 
+            parent[i] = i;
+    }
+    
+    int find_set(int v) {
+        if (v == parent[v])
+            return v;
+        return parent[v] = find_set(parent[v]);
+    }
+    
+    void union_sets(int a, int b) {
+        a = find_set(a);
+        b = find_set(b);
+        if (a != b)
+            parent[b] = a;
+    }
+    
+*******  ** *******************************************************Hint*******************************************************************************************************
+   You can check Image solution at https://photos.app.goo.gl/174txmodHZRs1o1R6
+   class Solution {
+public:
+    struct node
+    {
+      int data;
+       struct node* parent;
+        int rank;
+        
+    };
+    map<int,node*>m;
+    void makelist(int n)
+    {
+        struct node* root=(struct node*)malloc(sizeof(struct node));
+        root->data=n;
+        root->rank=0;
+        root->parent=root;
+        m[n]=root;
+    }
+    node* finds(node* root)
+    {
+        if(root->parent!=root)
+            finds(root->parent);
+        return root->parent;
+    }
+    void makeunion(int a,int b)
+    {
+        node* root1=finds(m[a]);
+        node* root2=finds(m[b]);
+      
+        if(root1==root2)
+            return;
+        if(root1->rank>=root2->rank)
+        {
+            if(root1->rank==root2->rank)
+                root1->rank+=1;
+            root2->parent=root1;
+        }
+        else
+        {
+            root1->parent=root2;
+        }
+    }
+    int findCircleNum(vector<vector<int>>& M) {
+        if(M.size()==0)
+            return 0;
+        int n=M.size();
+        int i,j,k,l;
+        for(i=0;i<n;i++)
+            makelist(i);
+        for(i=0;i<n;i++)
+            for(j=0;j<n;j++)
+            {
+                if(i!=j && M[i][j]==1)
+                    makeunion(i,j);
+            }
+        unordered_set<node*>s;
+        for(i=0;i<n;i++)
+        {
+            
+            node* a=finds(m[i]);
+            //cout<<i<<"The parent is"<<a->data<<endl;
+            s.insert(a->parent);
+        }
+        return s.size();
+    }
+};
