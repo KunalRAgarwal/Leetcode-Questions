@@ -1,0 +1,81 @@
+Question Link-https://leetcode.com/problems/partition-equal-subset-sum/
+
+There are two ways to solve this question 
+Approach 1:-Brute Force 
+Approack 2:-Dynammic Programming
+
+Approach 1:-
+class Solution {
+public:
+    bool k=false;
+    bool canPartition(vector<int>& nums) {
+    int i,j,l;
+        int sum=0;
+        for(i=0;i<nums.size();i++)
+            sum=sum+nums[i];
+        if(sum%2==1)
+            return false;
+        check(0,0,nums,sum/2);
+        return k;
+    }
+    void check(int i,int curr,vector<int> nums,int sum)
+    {
+        if(k==true)
+            return;
+        if(curr==sum)
+        {
+            
+            k=true;
+            return;
+        }
+        if(curr>sum || i>=nums.size())
+            return;
+        check(i+1,curr+nums[i],nums,sum);
+        check(i+1,curr,nums,sum);
+    }
+};
+
+Approach 2:-
+class Solution {
+public:
+    bool canPartition(vector<int>& nums) {
+        int n = nums.size();
+        int K = accumulate(nums.begin(), nums.end(), 0);
+        int rows = (K/2);
+        
+        if(K % 2 != 0)
+        {
+            return false;
+        }
+        
+        int dp[n+1][rows+1];
+ 
+        // Mark first row as false
+        for(int i=0; i <= rows; i++)
+        {
+            dp[0][i] = false;
+        }
+        
+        // Mark first column as true        
+        for(int i=0; i <= n; i++)
+        {
+            dp[i][0] = true;
+        }
+        
+        for(int i =1; i <= n; i++)
+        {
+            for(int j=1; j < rows+1; j++)
+            {
+                if((j-nums[i-1]) >= 0)
+                {
+                     dp[i][j] = dp[i-1][j] || dp[i-1][j-nums[i-1]];
+
+                }
+                else {
+                     dp[i][j] = dp[i-1][j];
+                }
+            }
+        }
+        return dp[n][rows];
+    }
+};
