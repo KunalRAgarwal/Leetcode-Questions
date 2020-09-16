@@ -66,7 +66,7 @@ public:
                             q.push(word);
                         }
                      }
-                    word[j] = c;
+                    word[j] = c;                                    //This is done to check various possibiliies to go from this word to the given word dictionary
                 }
             }
             ladder++;                                                          //Incremet of level
