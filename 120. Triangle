@@ -1,0 +1,44 @@
+https://leetcode.com/problems/triangle/
+Given a triangle, find the minimum path sum from top to bottom. Each step you may move to adjacent numbers on the row below.
+
+For example, given the following triangle
+
+[
+     [2],
+    [3,4],
+   [6,5,7],
+  [4,1,8,3]
+]
+The minimum path sum from top to bottom is 11 (i.e., 2 + 3 + 5 + 1 = 11).
+
+Note:
+
+Bonus point if you are able to do this using only O(n) extra space, where n is the total number of rows in the triangle.
+Answer:-
+class Solution {
+public:
+    int minimumTotal(vector<vector<int>>& triangle) {
+        int arr[triangle.size()];
+        int i,j,k,l,m,n;
+        n=triangle.size();
+        for(j=0;j<triangle[n-1].size();j++)
+        {
+            arr[j]=triangle[n-1][j];                                  //COpy the last row as it is 
+        }
+        for(i=n-2;i>=0;i--)
+        {
+            
+            for(j=0;j<triangle[i].size();j++)
+            {
+                  
+                if(arr[j]<arr[j+1])
+                    l=arr[j];
+                else
+                    l=arr[j+1];
+                arr[j]=triangle[i][j]+l;
+            }
+        }
+        return arr[0];
+    }
+};
+Reference:-https://www.youtube.com/watch?v=kXx2eB2B2kQ
