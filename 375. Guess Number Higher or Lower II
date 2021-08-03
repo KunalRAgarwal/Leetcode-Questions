@@ -1,0 +1,26 @@
+Question Link:-https://leetcode.com/problems/guess-number-higher-or-lower-ii/
+
+class Solution {
+public:
+    //There is this formula for Knapsack which w e have to use 
+    //to solve this problem
+    //The problem can be solved with that formula
+    //Formula:-
+    //P(i, c) ={ 0 if i = 0 or c ≤ 0}
+//             { max(P(i − 1, c), P(i − 1, c − wi) + pi) if wi ≤ c}
+//             { P(i − 1, c) otherwise}
+    
+    int recur (int start, int end, vector < vector <int> >& dp) {
+        if (start >= end) return 0;
+        if (dp[start][end] != INT_MAX) return dp[start][end];
+        for (int i = start; i <= end; i++) {
+            dp[start][end] = min(dp[start][end] ,max(i + recur(start, i - 1, dp),i + recur(i + 1, end, dp)));
+        }
+        return dp[start][end];
+    }
+    
+    int getMoneyAmount(int n) {
+        vector < vector <int> > dp(n + 1, vector <int> (n + 1, INT_MAX));
+        return recur(0, n, dp);
+    }
+};
